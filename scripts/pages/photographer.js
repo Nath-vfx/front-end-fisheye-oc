@@ -8,7 +8,7 @@ async function getPhotographer(param) {
             "http://localhost:63342/Front-End-Fisheye/data/photographers.json",
         );
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            console.log(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
         const photographers = data.photographers;
@@ -46,7 +46,7 @@ async function getPhotos(param) {
             "http://localhost:63342/Front-End-Fisheye/data/photographers.json",
         );
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            console.error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
