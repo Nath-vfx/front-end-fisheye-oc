@@ -5,7 +5,7 @@ async function getPhotographer(param) {
         console.log("Extracted ID:", urlId);
 
         const response = await fetch(
-            "http://localhost:63342/Front-End-Fisheye/data/photographers.json",
+            "/data/photographers.json",
         );
         if (!response.ok) {
             console.log(`HTTP error! status: ${response.status}`);
@@ -43,7 +43,7 @@ async function getPhotos(param) {
         const urlId = urlParams.get("id");
 
         const response = await fetch(
-            "http://localhost:63342/Front-End-Fisheye/data/photographers.json",
+            "/data/photographers.json",
         );
         if (!response.ok) {
             console.error(`HTTP error! status: ${response.status}`);
@@ -80,6 +80,7 @@ async function displayPhotos(photos, photographer) {
              allPhotos += `
               <div class="photo">
                   <img src="${photoLink}" alt="">
+                  <span>${photo.title}</span>
               </div>
             `
             //i++

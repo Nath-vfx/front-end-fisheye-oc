@@ -1,6 +1,6 @@
 async function getPhotographers() {
   const response = await fetch(
-      "http://localhost:63342/Front-End-Fisheye/data/photographers.json",
+      "/data/photographers.json",
   );
   const photographers = await response.json();
   console.log("Réponse : ", photographers);
