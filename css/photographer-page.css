@@ -48,9 +48,40 @@
     font-weight: 400;
     font-size: 24px;
     color: #901C1C;
+    margin-top: 10px;
 }
 
 .photo {
     display: flex;
     flex-direction: column;
+}
+
+.Photo-infos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.Photo-likes {
+    position: relative;
+}
+
+.Photo-likes::before {
+    content: url("/assets/icons/heart.svg");
+    position: absolute;
+    top: 50%;
+    left: -32px;
+    width: 24px;
+    height: 24px;
+    transform: translateY(-50%);
+    fill: #901C1C;
+}
+
+.photographer_section {
+    margin: 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 350px));
+    justify-content: space-between;
+    row-gap: 70px;
 }

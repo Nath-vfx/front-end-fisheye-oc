@@ -80,7 +80,11 @@ async function displayPhotos(photos, photographer) {
              allPhotos += `
               <div class="photo">
                   <img src="${photoLink}" alt="">
-                  <span>${photo.title}</span>
+                  <div class="Photo-infos">
+                <span class="Photo-title">${photo.title}</span>
+                  <span class="Photo-likes">${photo.likes}</span>  
+                </div>
+                  
               </div>
             `
             //i++
