@@ -37,6 +37,19 @@ async function displayPhotographer(data) {
   `;
 }
 
+function addSort(photos, el) {
+    return photos.sort(function (a, b) {
+        //console.log('Type of sort : ', typeof (a[el]));
+        if (typeof a[el] === 'number' && typeof b[el] === 'number') {
+            //console.log('Type of sort : ', a[el]);
+            return b[el] - a[el]; // Comparaison numérique pour les nombresk
+        } else {
+            //console.log('Type of sort : ', a[el]);
+            return a[el].localeCompare(b[el]); // Comparaison lexicographique pour les chaînes
+        }
+    })
+}
+
 async function getPhotos(param) {
     try {
         const urlParams = new URLSearchParams(param);
@@ -51,15 +64,17 @@ async function getPhotos(param) {
 
         const data = await response.json();
         const photos = data.media;
-        const photographersPhotos = photos.filter(
+        let photographersPhotos = photos.filter(
             (photo) => photo.photographerId === parseInt(urlId),
         )
-        console.log("Found photos from Photographer:", photographersPhotos);
+        //console.log("Found photos from Photographer:", addSort(photographersPhotos, 'title'));
+        photographersPhotos = addSort(photographersPhotos, 'title');
         return photographersPhotos;
     } catch (error) {
         console.error('Erreur : ', error)
     }
 }
+
 
 // Affiche les images dans la page photographer.html
 async function displayPhotos(photos, photographer) {
@@ -119,6 +134,8 @@ function addLike() {
         })
     }
 }
+
+
 
 async function init() {
     const photographer = await getPhotographer(window.location.search);

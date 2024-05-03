@@ -89,3 +89,9 @@
     justify-content: space-between;
     row-gap: 70px;
 }
+
+.selector {
+    display: flex;
+    margin-left: 100px;
+    gap: 2rem;
+}
