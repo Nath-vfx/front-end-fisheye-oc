@@ -65,16 +65,20 @@
 
 .Photo-likes {
     position: relative;
+    cursor: pointer;
 }
 
-.Photo-likes::before {
-    content: url("/assets/icons/heart.svg");
+.Photo-like-icon {
     position: absolute;
-    top: 50%;
-    left: -32px;
     width: 24px;
     height: 24px;
-    transform: translateY(-50%);
+    left: -32px;
+    top: 3px;
+    fill: transparent;
+    stroke: #901C1C;
+    stroke-width: 32px;
+}
+.liked {
     fill: #901C1C;
 }
 

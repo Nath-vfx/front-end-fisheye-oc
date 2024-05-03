@@ -81,8 +81,13 @@ async function displayPhotos(photos, photographer) {
               <div class="photo">
                   <img src="${photoLink}" alt="">
                   <div class="Photo-infos">
-                <span class="Photo-title">${photo.title}</span>
-                  <span class="Photo-likes">${photo.likes}</span>  
+                    <span class="Photo-title">${photo.title}</span>
+                    <div class="Photo-likes">
+                    <svg class="Photo-like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 576 512">
+                        <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                    </svg>
+                    <span class="Photo-likes-counter">${photo.likes}</span>
+                    </div>  
                 </div>
                   
               </div>
@@ -95,11 +100,32 @@ async function displayPhotos(photos, photographer) {
     dataSection.innerHTML = allPhotos
 }
 
+function addLike() {
+    const likeButtons = document.querySelectorAll('.Photo-likes');
+    for (const likeButton of likeButtons) {
+        likeButton.addEventListener('click', (e) => {
+            likeButton.querySelector('.Photo-like-icon').classList.toggle('liked');
+            // Sélection de l'élément à incrémenter
+            let addALike = likeButton.querySelector('.Photo-likes-counter')
+            // Ajout de la classe spécifique
+            addALike.classList.toggle('add-like');
+            // Si la classe est trouvé alors incrémentation +1
+            // Sinon incrémentation -1
+            if (addALike.classList.contains('add-like')) {
+                addALike.innerText = parseInt(addALike.innerText) + 1;
+            } else {
+                addALike.innerText = parseInt(addALike.innerText) - 1;
+            }
+        })
+    }
+}
+
 async function init() {
     const photographer = await getPhotographer(window.location.search);
     const photos = await getPhotos(window.location.search);
     displayPhotographer(photographer);
     displayPhotos(photos, photographer);
+    addLike();
 }
 
 init()

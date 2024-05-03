@@ -24,6 +24,12 @@ h1 {
     margin-left: 100px;
 }
 
+.photographer_section {
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .photographer_section article {
     justify-self: center;
     display: flex;
