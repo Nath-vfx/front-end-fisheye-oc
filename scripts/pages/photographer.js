@@ -1,3 +1,7 @@
+const sortSelector = document.getElementById('sortSelector');
+let photographies = [];
+let photographerId = null;
+
 async function getPhotographer(param) {
     try {
         const urlParams = new URLSearchParams(param);
@@ -17,7 +21,7 @@ async function getPhotographer(param) {
             (photographer) => photographer.id === parseInt(urlId),
         );
         console.log("Found Photographer:", photographer);
-        return photographer;
+        photographerId = photographer;
     } catch (e) {
         console.error('There was a problem with fetching the photographer:', e);
     }
@@ -36,7 +40,7 @@ async function displayPhotographer(data) {
   <img class="photographer-portrait" src="${portrait}" alt="">
   `;
 }
-
+/*
 function addSort(photos, el) {
     return photos.sort(function (a, b) {
         //console.log('Type of sort : ', typeof (a[el]));
@@ -48,7 +52,9 @@ function addSort(photos, el) {
             return a[el].localeCompare(b[el]); // Comparaison lexicographique pour les chaînes
         }
     })
-}
+}*/
+
+
 
 async function getPhotos(param) {
     try {
@@ -64,16 +70,36 @@ async function getPhotos(param) {
 
         const data = await response.json();
         const photos = data.media;
-        let photographersPhotos = photos.filter(
+        let photographersPhotos;
+        photographersPhotos = photos.filter(
             (photo) => photo.photographerId === parseInt(urlId),
-        )
+        );
         //console.log("Found photos from Photographer:", addSort(photographersPhotos, 'title'));
-        photographersPhotos = addSort(photographersPhotos, 'title');
-        return photographersPhotos;
+
+        photographies = photographersPhotos;
     } catch (error) {
         console.error('Erreur : ', error)
     }
 }
+
+async function sortPhotos(criteria) {
+    photographies.sort((a, b) => {
+        if (criteria === "popularity") {
+            return b.likes - a.likes
+        } else if (criteria === "date"){
+            return new Date(b.date) - new Date(a.date)
+        } else if (criteria === "title") {
+            return a.title.localeCompare(b.title);
+        }
+    })
+    displayPhotos(photographies, photographerId);
+}
+
+sortSelector.addEventListener('change', (event) => {
+    const criteria = event.target.value;
+    sortPhotos(criteria);
+});
+
 
 
 // Affiche les images dans la page photographer.html
@@ -90,7 +116,7 @@ async function displayPhotos(photos, photographer) {
     photos.forEach((photo) => {
         if (photo.image) {
             //Génération du lien de récupération des photos en utilisant dynamiquement à la fois le nom du photographe et le nom du fichier image
-            const photoLink = `assets/photographers/${photographer.name.split(" ")[0]}/${photo.image}`;
+            const photoLink = `assets/photographers/${photographerId.name.split(" ")[0]}/${photo.image}`;
             //Concaténation dans la variable allPhotos afin d'éviter l'écrasement par les photos successive dans le HTML
              allPhotos += `
               <div class="photo">
@@ -140,8 +166,8 @@ function addLike() {
 async function init() {
     const photographer = await getPhotographer(window.location.search);
     const photos = await getPhotos(window.location.search);
-    displayPhotographer(photographer);
-    displayPhotos(photos, photographer);
+    displayPhotographer(photographerId);
+    displayPhotos(photographies, photographer);
     addLike();
 }
 
