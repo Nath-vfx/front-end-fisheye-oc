@@ -22,6 +22,7 @@ async function getPhotographer(param) {
         );
         console.log("Found Photographer:", photographer);
         photographerId = photographer;
+        localStorage.setItem("photographer", photographerId.name.split(" ")[0]);
     } catch (e) {
         console.error('There was a problem with fetching the photographer:', e);
     }
@@ -77,6 +78,8 @@ async function getPhotos(param) {
         //console.log("Found photos from Photographer:", addSort(photographersPhotos, 'title'));
 
         photographies = photographersPhotos;
+
+        console.log('Photos : ',photographies);
     } catch (error) {
         console.error('Erreur : ', error)
     }
@@ -108,19 +111,21 @@ async function displayPhotos(photos, photographer) {
     const dataSection = document.querySelector(".photographer_section");
     //Déclaration de la variable d'insertion
     let allPhotos = '';
+    let table = []
     //let i = 0;
 
     //Pour chaque photo contenue dans le tableau photo
         // - SI 'photo.image' est VRAI alors une photo est ajouté à 'allPhotos'
         // - SINON le programme lit l'entrée suivante dans le tableau photos
-    photos.forEach((photo) => {
+    photos.forEach((photo, index) => {
         if (photo.image) {
+            table.push(photo);
             //Génération du lien de récupération des photos en utilisant dynamiquement à la fois le nom du photographe et le nom du fichier image
-            const photoLink = `assets/photographers/${photographerId.name.split(" ")[0]}/${photo.image}`;
+            let photoLink = `assets/photographers/${localStorage.getItem("photographer")}/${photo.image}`;
             //Concaténation dans la variable allPhotos afin d'éviter l'écrasement par les photos successive dans le HTML
              allPhotos += `
-              <div class="photo">
-                  <img src="${photoLink}" alt="">
+              <div class="photo" >
+                  <img src="${photoLink}" alt="" onclick="getImageInfos('${photoLink}','${photo.title}', '${index}'); toggleCarrousel()" >
                   <div class="Photo-infos">
                     <span class="Photo-title">${photo.title}</span>
                     <div class="Photo-likes">
@@ -139,6 +144,8 @@ async function displayPhotos(photos, photographer) {
     })
     //Ajout de la chaine de caractère dans le DOM
     dataSection.innerHTML = allPhotos
+    console.log('Table : ', table)
+    localStorage.setItem('photographies', JSON.stringify(table));
 }
 
 function addLike() {

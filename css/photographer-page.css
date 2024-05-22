@@ -95,3 +95,41 @@
     margin-left: 100px;
     gap: 2rem;
 }
+
+#carrousel {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
+#carrousel button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+#carrousel .chevron svg {
+    width: 48px;
+    height: 48px;
+}
+
+#carrousel img {
+    max-width: 900px;
+    max-height: 1050px;
+}
+
+#carrousel .carrousel_content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.open {
+    display: block !important;
+
+}
