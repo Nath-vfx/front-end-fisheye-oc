@@ -41,6 +41,7 @@ async function displayPhotographer(data) {
   <img class="photographer-portrait" src="${portrait}" alt="">
   `;
 }
+
 /*
 function addSort(photos, el) {
     return photos.sort(function (a, b) {
@@ -54,7 +55,6 @@ function addSort(photos, el) {
         }
     })
 }*/
-
 
 
 async function getPhotos(param) {
@@ -79,7 +79,7 @@ async function getPhotos(param) {
 
         photographies = photographersPhotos;
 
-        console.log('Photos : ',photographies);
+        console.log('Photos : ', photographies);
     } catch (error) {
         console.error('Erreur : ', error)
     }
@@ -89,7 +89,7 @@ async function sortPhotos(criteria) {
     photographies.sort((a, b) => {
         if (criteria === "popularity") {
             return b.likes - a.likes
-        } else if (criteria === "date"){
+        } else if (criteria === "date") {
             return new Date(b.date) - new Date(a.date)
         } else if (criteria === "title") {
             return a.title.localeCompare(b.title);
@@ -104,7 +104,6 @@ sortSelector.addEventListener('change', (event) => {
 });
 
 
-
 // Affiche les images dans la page photographer.html
 async function displayPhotos(photos, photographer) {
     //Récupération de la balise d'insertion
@@ -115,17 +114,19 @@ async function displayPhotos(photos, photographer) {
     //let i = 0;
 
     //Pour chaque photo contenue dans le tableau photo
-        // - SI 'photo.image' est VRAI alors une photo est ajouté à 'allPhotos'
-        // - SINON le programme lit l'entrée suivante dans le tableau photos
+    // - SI 'photo.image' est VRAI alors une photo est ajouté à 'allPhotos'
+    // - SINON le programme lit l'entrée suivante dans le tableau photos
     photos.forEach((photo, index) => {
         if (photo.image) {
             table.push(photo);
             //Génération du lien de récupération des photos en utilisant dynamiquement à la fois le nom du photographe et le nom du fichier image
             let photoLink = `assets/photographers/${localStorage.getItem("photographer")}/${photo.image}`;
             //Concaténation dans la variable allPhotos afin d'éviter l'écrasement par les photos successive dans le HTML
-             allPhotos += `
+            allPhotos += `
               <div class="photo" >
-                  <img src="${photoLink}" alt="" onclick="getImageInfos('${photoLink}','${photo.title}', '${index}'); toggleCarrousel()" >
+                <button class="photo_container" onclick="getImageInfos('${photoLink}','${photo.title}', '${index}'); toggleCarrousel()">
+                  <img src="${photoLink}" alt="">
+                    </button>
                   <div class="Photo-infos">
                     <span class="Photo-title">${photo.title}</span>
                     <div class="Photo-likes">
@@ -167,7 +168,6 @@ function addLike() {
         })
     }
 }
-
 
 
 async function init() {

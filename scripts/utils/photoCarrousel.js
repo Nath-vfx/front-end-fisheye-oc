@@ -14,6 +14,10 @@ function toggleCarrousel() {
     carousel.classList.toggle('open');
 }
 
+function closeCarrousel() {
+    carousel.classList.remove('open');
+}
+
 function getImageInfos(url, name, num) {
     image.src = url;
     title.innerText = name;
@@ -27,20 +31,29 @@ function updateImage(e) {
 }
 
 function nextImage() {
-    if (ind < photos.length - 1) {
-        ind++;
-        console.log("new index : ", ind);
-        updateImage(ind);
-    } else {
-
+    ind++;
+    if (ind >= photos.length) {
+        ind = 0;
     }
+    console.log("new index : ", ind);
+    updateImage(ind);
 }
 
 function previousImage() {
-    if (ind > 0) {
-        ind--;
-        console.log("new previous index : ", ind)
-        updateImage(ind);
+    ind--;
+    if (ind < 0) {
+        ind = photos.length - 1;
     }
+    console.log("new previous index : ", ind);
+    updateImage(ind);
 }
 
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        nextImage();
+    } else if (event.key === 'ArrowLeft') {
+        previousImage();
+    } else if (event.key === 'Escape') {
+        closeCarrousel();
+    }
+});

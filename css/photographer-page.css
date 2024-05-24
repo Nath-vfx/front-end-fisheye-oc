@@ -104,6 +104,8 @@
     width: 100vw;
     height: 100vh;
     display: none;
+    justify-content: center;
+    align-items: center;
 }
 
 #carrousel button {
@@ -121,15 +123,40 @@
 #carrousel img {
     max-width: 900px;
     max-height: 1050px;
+    width: 80vw;
+    height: 80vh;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.close_carrousel {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 #carrousel .carrousel_content {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.carrousel_image_title {
+    color: #901C1C;
+    font-size: 24px;
+    font-family: DM Sans, sans-serif;
 }
 
 .open {
-    display: block !important;
+    display: flex !important;
 
+}
+
+.photo_container {
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

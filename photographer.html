@@ -17,12 +17,12 @@
 <main id="main">
     <div class="photograph-header">
         <section class="data_section"></section>
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+        <button tabindex="1" class="contact_button" onclick="displayModal()">Contactez-moi</button>
         <div class="profil-photo"></div>
     </div>
     <div class="selector">
         <label for="sortSelector">Trier par</label>
-        <select id="sortSelector">
+        <select tabindex="2" id="sortSelector">
             <option value="popularity">Popularité</option>
             <option value="date">Date</option>
             <option value="title">Titre</option>
@@ -31,13 +31,13 @@
     <div class="photographer_section"></div>
 </main>
 <div id="carrousel">
-    <button onclick="toggleCarrousel()">
-        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M42 4.23L37.77 0L21 16.77L4.23 0L0 4.23L16.77 21L0 37.77L4.23 42L21 25.23L37.77 42L42 37.77L25.23 21L42 4.23Z"
-                  fill="#901C1C"/>
-        </svg>
-    </button>
     <div class="carrousel_content">
+        <button class="close_carrousel" onclick="toggleCarrousel()">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M42 4.23L37.77 0L21 16.77L4.23 0L0 4.23L16.77 21L0 37.77L4.23 42L21 25.23L37.77 42L42 37.77L25.23 21L42 4.23Z"
+                      fill="#901C1C"/>
+            </svg>
+        </button>
         <button class="chevron" onclick="previousImage()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
