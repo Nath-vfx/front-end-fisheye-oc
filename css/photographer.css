@@ -61,7 +61,7 @@
     line-height: initial;
 }
 
-.modal button {
+.modal .close-button {
     background: none;
     border: none;
 }
