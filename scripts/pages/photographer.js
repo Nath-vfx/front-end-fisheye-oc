@@ -1,6 +1,57 @@
-const sortSelector = document.getElementById('sortSelector');
-let photographies = [];
-let photographerId = null;
+const carousel = document.querySelector('#carrousel');
+const image = document.querySelector('.carrousel_image');
+const title = document.querySelector('.carrousel_image_title');
+
+let photographer = null;
+let photos = []; // Photographies seront assignées plus tard
+let photoUrl = ''; // URL de base pour les photos sera assigné plus tard
+let ind = 0; // Index de l'image actuelle
+
+//Afficher ou retirer le carrousel
+function toggleCarrousel() {
+    carousel.classList.toggle('open');
+}
+
+//Fermer le carrousel
+function closeCarrousel() {
+    carousel.classList.remove('open');
+}
+
+//Mis à jour de l'image de la modale du carrousel
+function updateImage(index) {
+    if (photos.length > 0 && index >= 0 && index < photos.length) {
+        image.src = photoUrl + photos[index].image;
+        title.innerText = photos[index].title;
+        ind = index;
+        console.log("Current index:", ind);
+    } else {
+        console.error("Index out of range or photos not loaded:", index);
+    }
+}
+
+function openCarrousel(index) {
+    console.log("Open carrousel with index:", index);
+    updateImage(index);
+    toggleCarrousel();
+}
+
+function nextImage() {
+    updateImage((ind + 1) % photos.length);
+}
+
+function previousImage() {
+    updateImage((ind - 1 + photos.length) % photos.length);
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        nextImage();
+    } else if (event.key === 'ArrowLeft') {
+        previousImage();
+    } else if (event.key === 'Escape') {
+        closeCarrousel();
+    }
+});
 
 async function getPhotographer(param) {
     try {
@@ -8,145 +59,110 @@ async function getPhotographer(param) {
         const urlId = urlParams.get("id");
         console.log("Extracted ID:", urlId);
 
-        const response = await fetch(
-            "/data/photographers.json",
-        );
+        const response = await fetch("/data/photographers.json");
         if (!response.ok) {
             console.log(`HTTP error! status: ${response.status}`);
+            return;
         }
         const data = await response.json();
-        const photographers = data.photographers;
-
-        const photographer = photographers.find(
-            (photographer) => photographer.id === parseInt(urlId),
-        );
+        photographer = data.photographers.find(photographer => photographer.id === parseInt(urlId));
+        if (!photographer) {
+            console.error('Photographer not found.');
+            return;
+        }
         console.log("Found Photographer:", photographer);
-        photographerId = photographer;
-        localStorage.setItem("photographer", photographerId.name.split(" ")[0]);
+        localStorage.setItem("photographer", photographer.name.split(" ")[0]);
     } catch (e) {
         console.error('There was a problem with fetching the photographer:', e);
     }
 }
-
-async function displayPhotographer(data) {
-    const dataSection = document.querySelector(".data_section");
-    const pp = document.querySelector(".profil-photo");
-    const portrait = `assets/photographers/${data.portrait}`
-    dataSection.innerHTML = `
-      <h2 class="photographer-name">${data.name}</h2>
-      <p class="photographer-location">${data.city}, ${data.country}</p>
-      <p class="photographer-tagline">${data.tagline}</p>
-  `;
-    pp.innerHTML = `
-  <img class="photographer-portrait" src="${portrait}" alt="">
-  `;
-}
-
-/*
-function addSort(photos, el) {
-    return photos.sort(function (a, b) {
-        //console.log('Type of sort : ', typeof (a[el]));
-        if (typeof a[el] === 'number' && typeof b[el] === 'number') {
-            //console.log('Type of sort : ', a[el]);
-            return b[el] - a[el]; // Comparaison numérique pour les nombresk
-        } else {
-            //console.log('Type of sort : ', a[el]);
-            return a[el].localeCompare(b[el]); // Comparaison lexicographique pour les chaînes
-        }
-    })
-}*/
-
 
 async function getPhotos(param) {
     try {
         const urlParams = new URLSearchParams(param);
         const urlId = urlParams.get("id");
 
-        const response = await fetch(
-            "/data/photographers.json",
-        );
+        const response = await fetch("/data/photographers.json");
         if (!response.ok) {
             console.error(`HTTP error! status: ${response.status}`);
+            return;
         }
 
         const data = await response.json();
-        const photos = data.media;
-        let photographersPhotos;
-        photographersPhotos = photos.filter(
-            (photo) => photo.photographerId === parseInt(urlId),
-        );
-        //console.log("Found photos from Photographer:", addSort(photographersPhotos, 'title'));
+        photos = data.media.filter(photo => photo.photographerId === parseInt(urlId) && photo.image);
+        console.log('Filtered Photos:', photos);
 
-        photographies = photographersPhotos;
-
-        console.log('Photos : ', photographies);
+        if (photos.length > 0) {
+            photoUrl = `assets/photographers/${localStorage.getItem("photographer")}/`;
+        } else {
+            console.error('No photos found for this photographer.');
+        }
     } catch (error) {
-        console.error('Erreur : ', error)
+        console.error('Erreur :', error);
     }
 }
 
 async function sortPhotos(criteria) {
-    photographies.sort((a, b) => {
+    photos.sort((a, b) => {
         if (criteria === "popularity") {
-            return b.likes - a.likes
+            return b.likes - a.likes;
         } else if (criteria === "date") {
-            return new Date(b.date) - new Date(a.date)
+            return new Date(b.date) - new Date(a.date);
         } else if (criteria === "title") {
             return a.title.localeCompare(b.title);
         }
-    })
-    displayPhotos(photographies, photographerId);
+    });
+    displayPhotos();
 }
 
-sortSelector.addEventListener('change', (event) => {
+document.getElementById('sortSelector').addEventListener('change', (event) => {
     const criteria = event.target.value;
     sortPhotos(criteria);
 });
 
+async function displayPhotographer(data) {
+    const dataSection = document.querySelector(".data_section");
+    const pp = document.querySelector(".profil-photo");
+    const portrait = `assets/photographers/${data.portrait}`;
+    dataSection.innerHTML = `
+        <h2 class="photographer-name">${data.name}</h2>
+        <p class="photographer-location">${data.city}, ${data.country}</p>
+        <p class="photographer-tagline">${data.tagline}</p>
+    `;
+    pp.innerHTML = `
+        <img class="photographer-portrait" src="${portrait}" alt="">
+    `;
+    const modalTitle = document.querySelector(".photographer-contact-title");
 
-// Affiche les images dans la page photographer.html
-async function displayPhotos(photos, photographer) {
-    //Récupération de la balise d'insertion
+    modalTitle.textContent = "Contactez-moi " + data.name;
+}
+
+async function displayPhotos() {
     const dataSection = document.querySelector(".photographer_section");
-    //Déclaration de la variable d'insertion
     let allPhotos = '';
-    let table = []
-    //let i = 0;
 
-    //Pour chaque photo contenue dans le tableau photo
-    // - SI 'photo.image' est VRAI alors une photo est ajouté à 'allPhotos'
-    // - SINON le programme lit l'entrée suivante dans le tableau photos
     photos.forEach((photo, index) => {
-        if (photo.image) {
-            table.push(photo);
-            //Génération du lien de récupération des photos en utilisant dynamiquement à la fois le nom du photographe et le nom du fichier image
-            let photoLink = `assets/photographers/${localStorage.getItem("photographer")}/${photo.image}`;
-            //Concaténation dans la variable allPhotos afin d'éviter l'écrasement par les photos successive dans le HTML
-            allPhotos += `
-              <div class="photo" >
-                <button class="photo_container" onclick="getImageInfos('${photoLink}','${photo.title}', '${index}'); toggleCarrousel()">
-                  <img src="${photoLink}" alt="">
-                    </button>
-                  <div class="Photo-infos">
-                    <span class="Photo-title">${photo.title}</span>
-                    <div class="Photo-likes">
-                    <svg class="Photo-like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 576 512">
-                        <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                    </svg>
-                    <span class="Photo-likes-counter">${photo.likes}</span>
-                    </div>  
-                </div>
-                  
+        const photoLink = `assets/photographers/${localStorage.getItem("photographer")}/${photo.image}`;
+        allPhotos += `
+          <div class="photo">
+            <button class="photo_container" onclick="openCarrousel(${index})">
+              <img src="${photoLink}" alt="">
+            </button>
+            <div class="Photo-infos">
+              <span class="Photo-title">${photo.title}</span>
+              <div class="Photo-likes">
+                <svg class="Photo-like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 576 512">
+                  <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                </svg>
+                <span class="Photo-likes-counter">${photo.likes}</span>
               </div>
-            `
-            //i++
-            //console.log("Boucles : ",i)
-        }
-    })
-    //Ajout de la chaine de caractère dans le DOM
-    dataSection.innerHTML = allPhotos
-    console.log('Table : ', table)
-    localStorage.setItem('photographies', JSON.stringify(table));
+            </div>
+          </div>
+        `;
+    });
+
+    dataSection.innerHTML = allPhotos;
+    localStorage.setItem('photographies', JSON.stringify(photos));
 }
 
 function addLike() {
@@ -154,28 +170,23 @@ function addLike() {
     for (const likeButton of likeButtons) {
         likeButton.addEventListener('click', (e) => {
             likeButton.querySelector('.Photo-like-icon').classList.toggle('liked');
-            // Sélection de l'élément à incrémenter
-            let addALike = likeButton.querySelector('.Photo-likes-counter')
-            // Ajout de la classe spécifique
+            let addALike = likeButton.querySelector('.Photo-likes-counter');
             addALike.classList.toggle('add-like');
-            // Si la classe est trouvé alors incrémentation +1
-            // Sinon incrémentation -1
             if (addALike.classList.contains('add-like')) {
                 addALike.innerText = parseInt(addALike.innerText) + 1;
             } else {
                 addALike.innerText = parseInt(addALike.innerText) - 1;
             }
-        })
+        });
     }
 }
 
-
 async function init() {
-    const photographer = await getPhotographer(window.location.search);
-    const photos = await getPhotos(window.location.search);
-    displayPhotographer(photographerId);
-    displayPhotos(photographies, photographer);
+    await getPhotographer(window.location.search);
+    await getPhotos(window.location.search);
+    displayPhotographer(photographer)
+    displayPhotos();
     addLike();
 }
 
-init()
+init();
