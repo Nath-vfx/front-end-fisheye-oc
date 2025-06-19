@@ -63,32 +63,31 @@
         <header>
             <h2 class="photographer-contact-title">Contactez-moi</h2>
             <button class="close-button" tabindex="0" onclick="closeModal()">
-                <img src="/assets/icons/close.svg" alt=""/>
+                <img src="assets/icons/close.svg" alt=""/>
             </button>
         </header>
         <form>
             <div>
                 <label for="surname">Prénom</label>
-                <input type="text" id="surname" name="surname"/>
+                <input type="text" id="surname" name="surname" required/>
             </div>
             <div>
                 <label for="lastname">Nom</label>
-                <input type="text" id="lastname" name="lastname"/>
+                <input type="text" id="lastname" name="lastname" required/>
             </div>
             <div>
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email"/>
+                <input type="text" id="email" name="email" required/>
             </div>
             <div>
                 <label for="message">Votre message</label>
-                <textarea id="message" name="message"></textarea>
+                <textarea id="message" name="message" required></textarea>
             </div>
-            <button class="contact_button">Envoyer</button>
+            <button class="contact_button" onclick="event.preventDefault(); closeModalSuccess()">Envoyer</button>
         </form>
     </div>
 </div>
-<script src="/scripts/pages/photographer.js"></script>
-<script src="/scripts/utils/contactForm.js"></script>
-<script src="/scripts/utils/photoCarrousel.js"></script>
+<script src="scripts/pages/photographer.js"></script>
+<script src="scripts/utils/contactForm.js"></script>
 </body>
 </html>

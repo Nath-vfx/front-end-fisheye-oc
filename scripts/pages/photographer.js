@@ -35,6 +35,18 @@ function openCarrousel(index) {
     toggleCarrousel();
 }
 
+function closeModalSuccess() {
+    modal.style.display = "none";
+    body.style.overflow = "visible";
+    const successMessage = document.createElement("p");
+    successMessage.textContent = "Message envoyé avec succès !";
+    successMessage.className = "success_message";
+    modal.appendChild(successMessage);
+    setTimeout(() => {
+        successMessage.remove();
+    }, 3000);
+}
+
 function nextImage() {
     updateImage((ind + 1) % photos.length);
 }
@@ -59,7 +71,7 @@ async function getPhotographer(param) {
         const urlId = urlParams.get("id");
         console.log("Extracted ID:", urlId);
 
-        const response = await fetch("/data/photographers.json");
+        const response = await fetch("data/photographers.json");
         if (!response.ok) {
             console.log(`HTTP error! status: ${response.status}`);
             return;

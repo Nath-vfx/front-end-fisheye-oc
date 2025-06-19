@@ -7,7 +7,7 @@ function indexTemplate(data) {
         const a = document.createElement("a");
         a.setAttribute(
             "href",
-            "/front-end-fisheye-oc/photographer.html?id=" + id,
+            "photographer.html?id=" + id,
         );
         const article = document.createElement("article");
         const div = document.createElement("div")
