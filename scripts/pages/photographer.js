@@ -137,7 +137,7 @@ async function displayPhotographer(data) {
     const pp = document.querySelector(".profil-photo");
     const portrait = `assets/photographers/${data.portrait}`;
     dataSection.innerHTML = `
-        <h2 class="photographer-name">${data.name}</h2>
+        <h1 class="photographer-name">${data.name}</h1>
         <p class="photographer-location">${data.city}, ${data.country}</p>
         <p class="photographer-tagline">${data.tagline}</p>
     `;
@@ -163,10 +163,12 @@ async function displayPhotos() {
             <div class="Photo-infos">
               <span class="Photo-title">${photo.title}</span>
               <div class="Photo-likes">
-                <svg class="Photo-like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 576 512">
-                  <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                </svg>
-                <span class="Photo-likes-counter">${photo.likes}</span>
+                <button class="Photo-like-btn" aria-label="Aimer la photo" tabindex="0">
+                  <svg class="Photo-like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 576 512">
+                    <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                  </svg>
+                  <span class="Photo-likes-counter">${photo.likes}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -178,16 +180,23 @@ async function displayPhotos() {
 }
 
 function addLike() {
-    const likeButtons = document.querySelectorAll('.Photo-likes');
+    const likeButtons = document.querySelectorAll('.Photo-like-btn');
     for (const likeButton of likeButtons) {
         likeButton.addEventListener('click', (e) => {
-            likeButton.querySelector('.Photo-like-icon').classList.toggle('liked');
+            const icon = likeButton.querySelector('.Photo-like-icon');
+            icon.classList.toggle('liked');
             let addALike = likeButton.querySelector('.Photo-likes-counter');
             addALike.classList.toggle('add-like');
             if (addALike.classList.contains('add-like')) {
                 addALike.innerText = parseInt(addALike.innerText) + 1;
             } else {
                 addALike.innerText = parseInt(addALike.innerText) - 1;
+            }
+        });
+        likeButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                likeButton.click();
             }
         });
     }

@@ -9,19 +9,31 @@ function indexTemplate(data) {
             "href",
             "photographer.html?id=" + id,
         );
+        a.setAttribute("aria-label", `Voir la page du photographe ${name}`);
         const article = document.createElement("article");
+        article.setAttribute("tabindex", "0");
+        article.setAttribute("aria-label", `${name}, ${city}, ${tagline}, ${price} euros par jour`);
         const div = document.createElement("div")
         const img = document.createElement("img");
         img.setAttribute("src", picture);
+        img.setAttribute("alt", `Portrait de ${name}`);
         const h2 = document.createElement("h2");
-        const h3 = document.createElement("h3");
-        const h4 = document.createElement("h4");
-        const p = document.createElement("p")
         h2.textContent = name;
+        h2.setAttribute("tabindex", "0");
+        h2.setAttribute("role", "heading");
+        h2.setAttribute("aria-level", "2");
+        const h3 = document.createElement("h3");
         h3.textContent = city;
+        h3.setAttribute("tabindex", "0");
+        h3.setAttribute("aria-label", `Ville : ${city}`);
+        const h4 = document.createElement("h4");
         h4.textContent = tagline;
-
+        h4.setAttribute("tabindex", "0");
+        h4.setAttribute("aria-label", `Slogan : ${tagline}`);
+        const p = document.createElement("p")
         p.textContent = price + "€/Jour"
+        p.setAttribute("tabindex", "0");
+        p.setAttribute("aria-label", `Tarif : ${price} euros par jour`);
         a.appendChild(article);
         article.appendChild(img);
         article.appendChild(h2);

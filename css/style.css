@@ -28,6 +28,7 @@ h1 {
     margin-top: 100px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .photographer_section article {

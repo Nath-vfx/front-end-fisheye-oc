@@ -1,6 +1,6 @@
 #contact_modal {
     display: none;
-    background: #00000011;
+    background: #000000AA;
     position: absolute;
     top: 0;
     left: 0;
@@ -33,6 +33,8 @@
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
+    position: relative;
+    z-index: 1000;
     width: 50%;
     height: 80%;
     display: flex;
@@ -100,4 +102,21 @@ form input {
     border: none;
     border-radius: 8px;
     outline: none;
+}
+
+.Photo-like-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+    display: inline;
+}
+
+.Photo-like-btn:focus .Photo-like-icon {
+    outline: 2px solid #901C1C;
+    outline-offset: 2px;
 }
